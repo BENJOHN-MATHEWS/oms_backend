@@ -41,9 +41,33 @@ public class OrganizationServiceImpl implements OrganizationService{
 		
 		if(emp.isEmpty()) {
 			organizationRepository.deleteById(id);
-		}		
+		} 
+//		else {
+//			
+//		}		
+	}
+
+	@Override
+	public Optional<Organization> getOrgById(Long id) {
+		
+		return organizationRepository.findById(id);
+	}
+
+	@Override
+	public void updateOrgById(Long id, Organization updatedOrg) {
+		
+		Optional<Organization> existingOrg = organizationRepository.findById(id);
+		
+		if(existingOrg.isPresent()) {
 			
+			Organization eOrg = existingOrg.get();
 			
+			eOrg.setName(updatedOrg.getName());			
+			eOrg.setAddress(updatedOrg.getAddress());
+			organizationRepository.save(eOrg);
+			
+		}
+		
 		
 	}
 	

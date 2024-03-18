@@ -9,10 +9,14 @@ import org.springframework.web.bind.annotation.RestController;
 import com.infenia.oms.entity.Organization;
 import com.infenia.oms.service.OrganizationService;
 
+import jakarta.validation.Valid;
+
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,16 +33,29 @@ public class OrganizationController {
 	
 	// Add Organization
 	@PostMapping("/addOrg")
-	public ResponseEntity<Organization> addOrganization(@RequestBody Organization organization) {
+	public ResponseEntity<Organization> addOrganization(@Valid @RequestBody Organization organization) {
         Organization createdOrganization = organizationService.addOrganization(organization);
         return new ResponseEntity<>(createdOrganization, HttpStatus.CREATED);
     }
 	
-	//Update Organization
-	@PutMapping("/updateOrg")	
+	//Update Organization by Id
+	@PutMapping("/updateOrg/{id}")
+	public  ResponseEntity<Organization> updateOrgById(@PathVariable Long id,@RequestBody Organization updatedOrg) {
+		organizationService.updateOrgById(id, updatedOrg);
+		return null;
+	}	
 	
 	//View Org by Id
-	@GetMapping("/viewOrgById")
+	@GetMapping("/viewOrgById/{id}")
+	public ResponseEntity<Optional<Organization>> viewOrgById(@PathVariable Long id) {
+		Optional<Organization> organization = organizationService.getOrgById(id);
+		
+		if(organization.isPresent()) {
+			 return new ResponseEntity<Optional<Organization>>(organization, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		}		
+	}
 	
 	
 	//View All Org
