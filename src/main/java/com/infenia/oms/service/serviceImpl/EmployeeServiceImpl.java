@@ -44,11 +44,16 @@ public class EmployeeServiceImpl implements EmployeeService {
 			eEmp.setOrganization(updatedEmp.getOrganization());
 			eEmp.setPhoneNo(updatedEmp.getPhoneNo());
 			
-			employeeRepository.save(eEmp);
-			
+			employeeRepository.save(eEmp);			
 		}
 		return eEmp;
 		
+	}
+
+	@Override
+	public List<Employee> getAllEmp() {
+		
+		return employeeRepository.findAll();
 	}
 	
 	
